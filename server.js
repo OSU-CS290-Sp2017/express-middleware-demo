@@ -1,3 +1,4 @@
+var path = require('path');
 var express = require('express');
 var logger = require('./lib/logger');
 var app = express();
@@ -51,6 +52,14 @@ app.get('/', function (req, res) {
 });
 
 /*
+ * Here, we're using an Express built-in middleware to serve files from the
+ * public/ directory statically.  In this case, these files will be available
+ * out of the root URL path, e.g. public/index.html will be available at URL
+ * path /index.html.
+ */
+app.use(express.static(path.join(__dirname, 'public')));
+
+/*
  * This middleware function will be used on all HTTP POST requests.  That's
  * what app.post('*', specifies).
  */
@@ -80,7 +89,7 @@ app.get('*', function (req, res) {
   res.status(404);
   res.send(content);
 
-})
+});
 
 // Start the server listening on the specified port.
 app.listen(port, function () {
